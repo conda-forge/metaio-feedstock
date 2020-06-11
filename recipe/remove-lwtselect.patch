@@ -1,0 +1,11 @@
+--- src/Makefile.in   2020-06-11 11:07:14.681363100 +0100
++++ src/Makefile.in   2020-06-11 11:08:08.101319900 +0100
+@@ -582,7 +582,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ AM_CPPFLAGS = -I$(top_builddir)/src -I$(top_srcdir)/src
+-bin_SCRIPTS = lwtselect
++bin_SCRIPTS =
+ include_HEADERS = metaio.h ligo_lw_header.h
+ TESTS = metaio_test.sh
+ lib_LTLIBRARIES = libmetaio.la
