@@ -1,3 +1,9 @@
+#!/bin/bash
+
+# help for windows builds
+mkdir -pv ${TMPDIR:=${SRC_DIR}/_tmp}
+export TMPDIR
+
 # configure
 ./configure \
 	--prefix=${PREFIX} \

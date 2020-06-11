@@ -1,5 +1,6 @@
 {% set name = "metaio" %}
 {% set version = "8.5.1" %}
+{% set posix = 'm2-' if win else '' %}
 
 package:
   name: {{ name|lower }}
@@ -11,15 +12,18 @@ source:
   patches:
     # remove scripts that shouldn't be installed
     - remove-unused.patch
+    # remove lwtselect on windows (it's bash)
+    - remove-lwtselect.patch  # [win]
 
 build:
   number: 1001
-  skip: true  # [win]
 
 requirements:
   build:
-    - make
-    - {{ compiler('c') }}
+    - {{ compiler('c') }}  # [not win]
+    - {{ compiler('m2w64_c') }}  # [win]
+    - {{ posix }}make
+    - posix  # [win]
   host:
     - zlib
   run:
