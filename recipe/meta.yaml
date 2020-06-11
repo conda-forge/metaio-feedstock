@@ -37,7 +37,6 @@ test:
     - lwtprint src/dmt_sample.xml -t gds_trigger -c ifo -c name -c subtype -c significance
     - lwtcut src/dmt_sample.xml -r 1-10 -o cut.xml
     - lwtdiff src/dmt_sample.xml src/dmt_sample.xml
-    - lwtselect  # [not win]
 
 about:
   home: https://wiki.ligo.org/Computing/MetaIO
