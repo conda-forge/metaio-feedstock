@@ -1,11 +1,15 @@
+# configure
 ./configure \
-    --prefix=${PREFIX} \
-    --with-zlib=${PREFIX} \
-    --without-matlab
-make -j ${CPU_COUNT}
-make -j ${CPU_COUNT} install
+	--prefix=${PREFIX} \
+	--with-zlib=${PREFIX} \
+	--without-matlab \
+;
 
-# manually remove unwanted executables
-rm -vf \
-    ${PREFIX}/bin/_getMetaLoopHelper \
-    ${PREFIX}/bin/concatMeta
+# build
+make -j ${CPU_COUNT} V=1 VERBOSE=1
+
+# test
+make -j ${CPU_COUNT} V=1 VERBOSE=1 check
+
+# install
+make -j ${CPU_COUNT} V=1 VERBOSE=1 install
