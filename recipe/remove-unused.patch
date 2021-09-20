@@ -1,11 +1,11 @@
---- src/Makefile.in     2018-05-08 07:22:11.000000000 +0100
-+++ src/Makefile.in     2020-06-11 11:07:14.681363100 +0100
+--- src/Makefile.in	2018-05-08 07:22:11.000000000 +0100
++++ src/Makefile.in	2021-09-20 09:45:18.843566100 +0100
 @@ -94,7 +94,7 @@
  build_triplet = @build@
  host_triplet = @host@
  bin_PROGRAMS = lwtscan$(EXEEXT) lwtprint$(EXEEXT) lwtdiff$(EXEEXT) \
--       lwtcut$(EXEEXT) _getMetaLoopHelper$(EXEEXT)
-+       lwtcut$(EXEEXT)
+-	lwtcut$(EXEEXT) _getMetaLoopHelper$(EXEEXT)
++	lwtcut$(EXEEXT)
  check_PROGRAMS = parse_test$(EXEEXT) parse_test_table_only$(EXEEXT)
  subdir = src
  ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
