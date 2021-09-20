@@ -14,8 +14,9 @@ export TMPDIR
 # build
 make -j ${CPU_COUNT} V=1 VERBOSE=1
 
-# test (skip windows, they hang for some reason)
-if [ "$(uname)" == "Linux" -o "$(uname)" == "Darwin" ]; then
+# test (skip windows and cross-compiling, they hang for some reason)
+if [[ "${CONDA_BUILD_CROSS_COMPILATION:-}" != "1" ]] && \
+   ( [[ "$(uname)" == "Linux" ]] || [[ "$(uname)" == "Darwin" ]] ); then
 	make -j ${CPU_COUNT} V=1 VERBOSE=1 check
 fi
 
