@@ -6,6 +6,7 @@ export TMPDIR
 
 # configure
 ./configure \
+	--disable-static \
 	--prefix=${PREFIX} \
 	--with-zlib=${PREFIX} \
 	--without-matlab \
