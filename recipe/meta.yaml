@@ -2,8 +2,11 @@
 {% set version = "8.5.1" %}
 {% set posix = 'm2-' if win else '' %}
 
+# handle different output paths on Windows and Unix
+{% set library_prefix = "Library/" if win else "" %}
+
 package:
-  name: {{ name|lower }}
+  name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
@@ -18,7 +21,7 @@ source:
     - remove-lwtselect.patch  # [win]
 
 build:
-  number: 1001
+  number: 1002
 
 requirements:
   build:
@@ -28,17 +31,61 @@ requirements:
     - posix  # [win]
   host:
     - zlib
-  run:
-    - zlib
 
-test:
-  source_files:
-    - src/dmt_sample.xml
-  commands:
-    - lwtscan src/dmt_sample.xml
-    - lwtprint src/dmt_sample.xml -t gds_trigger -c ifo -c name -c subtype -c significance
-    - lwtcut src/dmt_sample.xml -r 1-10 -o cut.xml
-    - lwtdiff src/dmt_sample.xml src/dmt_sample.xml
+outputs:
+  - name: libmetaio
+    build:
+      error_overdepending: true
+      error_overlinking: true
+      run_exports:
+        - {{ pin_subpackage("libmetaio", max_pin="x") }}
+    requirements:
+      build:
+        - {{ compiler('c') }}  # [not win]
+        - {{ compiler('m2w64_c') }}  # [win]
+      host:
+        - zlib
+      run_constrained:
+        - metaio >=8.5.1
+    files:
+      # headers
+      - {{ library_prefix }}include/metaio.h
+      - {{ library_prefix }}include/ligo_lw_header.h
+      # libraries
+      - {{ library_prefix }}lib/libmetaio.*
+      # pkg-config
+      - {{ library_prefix }}lib/pkgconfig/libmetaio.pc
+    test:
+      requires:
+        - pkg-config  # [not win]
+      commands:
+        # check library
+        - test -f ${PREFIX}/lib/libmetaio${SHLIB_EXT}  # [unix]
+        # check pkg-config
+        - pkg-config --print-errors --exact-version "{{ version }}" libmetaio  # [unix]
+
+  - name: metaio
+    build:
+      run_exports:
+        - {{ pin_subpackage("libmetaio", max_pin="x") }}
+    requirements:
+      build:
+        - {{ compiler('c') }}  # [not win]
+        - {{ compiler('m2w64_c') }}  # [win]
+      host:
+        - {{ pin_subpackage("libmetaio", exact=True) }}
+      run:
+        - {{ pin_subpackage("libmetaio", exact=True) }}
+    files:
+      - {{ library_prefix}}bin/lwt*
+    test:
+      source_files:
+        - src/dmt_sample.xml
+      commands:
+        - lwtscan src/dmt_sample.xml
+        - lwtprint src/dmt_sample.xml -t gds_trigger -c ifo -c name -c subtype -c significance
+        - lwtcut src/dmt_sample.xml -r 1-10 -o cut.xml
+        - lwtdiff src/dmt_sample.xml src/dmt_sample.xml
 
 about:
   home: https://wiki.ligo.org/Computing/MetaIO
@@ -48,5 +95,6 @@ about:
   summary: LIGO Light-Weight XML Library
 
 extra:
+  feedstock-name: metaio
   recipe-maintainers:
     - duncanmmacleod
