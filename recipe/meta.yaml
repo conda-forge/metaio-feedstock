@@ -21,7 +21,7 @@ source:
     - remove-lwtselect.patch  # [win]
 
 build:
-  number: 1002
+  number: 1003
 
 requirements:
   build:
