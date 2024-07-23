@@ -21,12 +21,14 @@ source:
     - remove-lwtselect.patch  # [win]
 
 build:
-  number: 1002
+  number: 1003
+  skip: true  # [win]
 
 requirements:
   build:
     - {{ compiler('c') }}  # [not win]
     - {{ compiler('m2w64_c') }}  # [win]
+    - {{ stdlib('c') }}
     - {{ posix }}make
     - posix  # [win]
   host:
@@ -43,6 +45,7 @@ outputs:
       build:
         - {{ compiler('c') }}  # [not win]
         - {{ compiler('m2w64_c') }}  # [win]
+        - {{ stdlib('c') }}
       host:
         - zlib
       run_constrained:
@@ -72,12 +75,13 @@ outputs:
       build:
         - {{ compiler('c') }}  # [not win]
         - {{ compiler('m2w64_c') }}  # [win]
+        - {{ stdlib('c') }}
       host:
         - {{ pin_subpackage("libmetaio", exact=True) }}
       run:
         - {{ pin_subpackage("libmetaio", exact=True) }}
     files:
-      - {{ library_prefix}}bin/lwt*
+      - {{ library_prefix }}bin/lwt*
     test:
       source_files:
         - src/dmt_sample.xml
@@ -98,3 +102,4 @@ extra:
   feedstock-name: metaio
   recipe-maintainers:
     - duncanmmacleod
+    - skymoo
